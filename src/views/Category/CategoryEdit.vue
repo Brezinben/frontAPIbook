@@ -6,7 +6,7 @@
            type="text">
 
     <div class="flex items-center">
-      <button @click="saveCharacter"
+      <button @click="updateCategory"
               class="mt-5 mr-5 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
               type="submit">Modifier
       </button>
@@ -34,12 +34,12 @@ export default {
     this.bookCount = this.category?.book_count ? this.category.book_count : 0;
   },
   methods: {
-    saveCharacter() {
+    updateCategory() {
       if (this.category.title) {
         axios.put(`http://127.0.0.1:8000/api/categories/${this.category.id}`, {
           "title": this.category.title,
         }, {headers: this.$store.state.headers})
-            .then((r) => {
+            .then(r => {
               this.$store.state.categories = null;
               this.$store.state.books = null;
               this.$store.commit('setUpdated', "La categorie a bien été modifier");
@@ -49,14 +49,16 @@ export default {
       }
     },
     deleteCategory() {
-      axios.delete(`http://127.0.0.1:8000/api/categories/${this.$route.params.id}`, {headers: this.$store.state.headers})
-          .then((r) => {
-            this.$store.state.categories = null;
-            this.$store.state.books = null;
-            this.$store.commit('setUpdated', "La categorie a bien été supprimer");
-            this.$router.push({name: 'books'})
-          })
-          .catch((e) => this.$store.commit('setError', e))
+      if (confirm("Vous êtes sûr ?")) {
+        axios.delete(`http://127.0.0.1:8000/api/categories/${this.$route.params.id}`, {headers: this.$store.state.headers})
+            .then(r => {
+              this.$store.state.categories = null;
+              this.$store.state.books = null;
+              this.$store.commit('setUpdated', "La categorie a bien été supprimer");
+              this.$router.push({name: 'books'})
+            })
+            .catch((e) => this.$store.commit('setError', e))
+      }
     }
   },
   computed: {

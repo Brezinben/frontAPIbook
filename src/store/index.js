@@ -2,17 +2,22 @@ import {createStore} from 'vuex'
 
 export default createStore({
     state: {
+        //Contient les tableaux d'entité
         books: null,
         categories: null,
         authors: null,
 
+        //Contient l'entité en cour de modification
         currentBook: null,
         currentCategory: null,
         currentAuthor: null,
 
+        //les différents statue pour les erreus
         error: null,
         updated: null,
         created: null,
+
+        //Header des requêtes axios
         headers: {
             'Accept': 'application/json',
             'Authorization': 'Bearer CCDENpQR0aX6hqBAARH0UbKk2tAtdf6pF8QrZb6N'
@@ -20,10 +25,12 @@ export default createStore({
     },
     mutations: {
         hydrateBooks: (state, books) => state.books = books,
+        //Viens enlever la clé books en +
         hydrateCategories: (state, categories) => state.categories = categories.filter(c => c.books?.length).map(c => {
-                delete c.books;
-                return c;
-            }),
+            delete c.books;
+            return c;
+        }),
+        //Viens enlever la clé books en +
         hydrateAuthors: (state, authors) => state.authors = authors.filter(a => a.books?.length).map(a => {
             delete a.books;
             return a;

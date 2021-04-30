@@ -59,7 +59,7 @@ export default {
           "birth_date": this.author.birth_date,
           "death_date": this.author.death_date,
         }, {headers: this.$store.state.headers})
-            .then((r) => {
+            .then(r => {
               this.$store.commit('setUpdated', "L'auteur a été modifier.");
               this.$router.push({name: 'books'})
             })
@@ -67,15 +67,17 @@ export default {
       }
     },
     deleteAuthor() {
-      axios.delete(`http://127.0.0.1:8000/api/authors/${this.$route.params.id}`, {headers: this.$store.state.headers})
-          .then((r) => {
-            this.$store.state.authors = null;
-            this.$store.state.books = null;
+      if (confirm("Vous êtes sûr ?")) {
+        axios.delete(`http://127.0.0.1:8000/api/authors/${this.$route.params.id}`, {headers: this.$store.state.headers})
+            .then(r => {
+              this.$store.state.authors = null;
+              this.$store.state.books = null;
 
-            this.$store.commit('setUpdated', "L'auteur a été supprimer.");
-            this.$router.push({name: 'books'})
-          })
-          .catch((e) => this.$store.commit('setError', e))
+              this.$store.commit('setUpdated', "L'auteur a été supprimer.");
+              this.$router.push({name: 'books'})
+            })
+            .catch((e) => this.$store.commit('setError', e))
+      }
     }
   },
   computed: {
