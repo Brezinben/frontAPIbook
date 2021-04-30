@@ -45,13 +45,8 @@
   </div>
 </template>
 <script>
-
 import axios from "axios";
 
-const headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer CCDENpQR0aX6hqBAARH0UbKk2tAtdf6pF8QrZb6N'
-}
 export default {
   name: "BooksAdd"
   ,
@@ -75,7 +70,7 @@ export default {
           "status": this.book.status,
           'category': this.book.category,
           'author': this.book.author,
-        }, {headers: headers})
+        }, {headers: this.$store.state.headers})
             .then(() => {
               this.book.title = null;
               this.book.publishDate = null;
@@ -83,6 +78,7 @@ export default {
               this.book.category = null;
               this.book.author = null;
 
+              this.$store.state.books = null;
               this.$store.commit('setCreated', "Le livre a été crée.");
             })
             .catch((e) => this.$store.commit('setError', e))

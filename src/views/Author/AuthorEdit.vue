@@ -21,7 +21,7 @@
            class="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
 
     <div class="flex items-center">
-      <button @click="saveCharacter"
+      <button @click="updateAuthor"
               class="mt-5 mr-5 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
               type="submit">Modifier
       </button>
@@ -41,50 +41,48 @@
 <script>
 import axios from "axios";
 
-const headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer CCDENpQR0aX6hqBAARH0UbKk2tAtdf6pF8QrZb6N'
-}
 export default {
   name: "AuthorEdit",
   data() {
     return {
-      author: null,
       bookCount: null
     }
   }, mounted() {
-    axios.get(`http://127.0.0.1:8000/api/authors/${this.$route.params.id}`, {headers: headers})
-        .then((r) => {
-          this.author = r.data.data;
-          this.bookCount = this.author?.books?.length ? this.author.books.length : 0;
-        })
-        .catch((e) => this.$store.commit('setError', e))
+    this.bookCount = this.author?.book_count ? this.author.book_count : 0;
   },
   methods: {
-    saveCharacter() {
+    updateAuthor() {
       if (this.author.first_name && this.author.last_name && this.author.birth_date) {
         axios.put(`http://127.0.0.1:8000/api/authors/${this.author.id}`, {
           "first_name": this.author.first_name,
           "last_name": this.author.last_name,
           "birth_date": this.author.birth_date,
           "death_date": this.author.death_date,
-        }, {headers: headers})
+        }, {headers: this.$store.state.headers})
             .then((r) => {
               this.$store.commit('setUpdated', "L'auteur a été modifier.");
-              this.$router.go(-1)
+              this.$router.push({name: 'books'})
             })
             .catch((e) => this.$store.commit('setError', e))
       }
     },
     deleteAuthor() {
-      axios.delete(`http://127.0.0.1:8000/api/authors/${this.$route.params.id}`, {headers: headers})
+      axios.delete(`http://127.0.0.1:8000/api/authors/${this.$route.params.id}`, {headers: this.$store.state.headers})
           .then((r) => {
+            this.$store.state.authors = null;
+            this.$store.state.books = null;
+
             this.$store.commit('setUpdated', "L'auteur a été supprimer.");
-            this.$router.go(-1)
+            this.$router.push({name: 'books'})
           })
           .catch((e) => this.$store.commit('setError', e))
     }
   },
+  computed: {
+    author() {
+      return this.$store.getters.getCurrentAuthor
+    }
+  }
 }
 </script>
 

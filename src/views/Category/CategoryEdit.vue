@@ -1,5 +1,4 @@
 <template>
-
   <div v-if="category" class=" container mx-auto text-gray-100">
     <label class="form-label" for="t">Title</label>
     <input id="t" v-model="category.title"
@@ -19,56 +18,52 @@
         Vous ne pouvez pas supprimer cet categorie car elle est lié à {{ bookCount }} livres.
       </div>
     </div>
-
-
   </div>
-
 </template>
 
 <script>
 import axios from "axios";
 
-const headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer CCDENpQR0aX6hqBAARH0UbKk2tAtdf6pF8QrZb6N'
-}
 export default {
   name: "CategoryEdit",
   data() {
     return {
-      category: null,
       bookCount: null
     }
   }, mounted() {
-    axios.get(`http://127.0.0.1:8000/api/categories/${this.$route.params.id}`, {headers: headers})
-        .then((r) => {
-          this.category = r.data.data;
-          this.bookCount = this.category?.books?.length ? this.category.books.length : 0;
-        })
-        .catch((e) => this.$store.commit('setError', e))
+    this.bookCount = this.category?.book_count ? this.category.book_count : 0;
   },
   methods: {
     saveCharacter() {
       if (this.category.title) {
         axios.put(`http://127.0.0.1:8000/api/categories/${this.category.id}`, {
           "title": this.category.title,
-        }, {headers: headers})
+        }, {headers: this.$store.state.headers})
             .then((r) => {
+              this.$store.state.categories = null;
+              this.$store.state.books = null;
               this.$store.commit('setUpdated', "La categorie a bien été modifier");
-              this.$router.go(-1)
+              this.$router.push({name: 'books'})
             })
             .catch((e) => this.$store.commit('setError', e))
       }
     },
     deleteCategory() {
-      axios.delete(`http://127.0.0.1:8000/api/categories/${this.$route.params.id}`, {headers: headers})
+      axios.delete(`http://127.0.0.1:8000/api/categories/${this.$route.params.id}`, {headers: this.$store.state.headers})
           .then((r) => {
+            this.$store.state.categories = null;
+            this.$store.state.books = null;
             this.$store.commit('setUpdated', "La categorie a bien été supprimer");
-            this.$router.go(-1)
+            this.$router.push({name: 'books'})
           })
           .catch((e) => this.$store.commit('setError', e))
     }
   },
+  computed: {
+    category() {
+      return this.$store.getters.getCurrentCategory
+    }
+  }
 }
 </script>
 

@@ -14,13 +14,8 @@
   </div>
 </template>
 <script>
-
 import axios from "axios";
 
-const headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer CCDENpQR0aX6hqBAARH0UbKk2tAtdf6pF8QrZb6N'
-}
 export default {
   name: "CategoryAdd"
   ,
@@ -36,9 +31,12 @@ export default {
       if (this.category.title) {
         axios.post("http://127.0.0.1:8000/api/categories/", {
           "title": this.category.title,
-        }, {headers: headers})
+        }, {headers: this.$store.state.headers})
             .then(() => {
               this.category.title = null;
+
+              this.$store.state.categories = null;
+              this.$store.state.books = null;
               this.$store.commit('setCreated', "La catégorie a été crée.");
             })
             .catch((e) => this.$store.commit('setError', e))

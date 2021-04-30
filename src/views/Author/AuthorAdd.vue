@@ -28,13 +28,8 @@
   </div>
 </template>
 <script>
-
 import axios from "axios";
 
-const headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer CCDENpQR0aX6hqBAARH0UbKk2tAtdf6pF8QrZb6N'
-}
 export default {
   name: "AuthorAdd"
   ,
@@ -56,13 +51,16 @@ export default {
           "last_name": this.author.last_name,
           "birth_date": this.author.birth_date,
           "death_date": this.author.death_date,
-        }, {headers: headers})
+        }, {headers: this.$store.state.headers})
             .then(() => {
               this.author.first_name = null;
               this.author.last_name = null;
               this.author.birth_date = null;
               this.author.death_date = null;
-              this.$store.commit('setCreated', "L'auteura été crée.");
+
+              this.$store.state.authors = null;
+              this.$store.state.books = null;
+              this.$store.commit('setCreated', "L'auteur a été crée.");
             })
             .catch((e) => this.$store.commit('setError', e))
       }

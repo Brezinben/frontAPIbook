@@ -9,6 +9,7 @@ import AuthorEdit from "@/views/Author/AuthorEdit.vue";
 
 import CategoryAdd from "@/views/Category/CategoryAdd.vue";
 import CategoryEdit from "@/views/Category/CategoryEdit.vue";
+import NotFound from "@/views/NotFound.vue";
 
 const routes = [
     {
@@ -63,7 +64,7 @@ const routes = [
 
     {
         path: '/:path(.*)',
-        component: Books
+        component: NotFound
     },
 ]
 

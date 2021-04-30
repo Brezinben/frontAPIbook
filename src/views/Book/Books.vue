@@ -1,79 +1,66 @@
 <template>
-  <div
-      class="flex mb-6 text-white  transition ease-in duration-200 text-center text-4xl md:text-base font-semibold shadow-md focus:outline-none">
-    <router-link
-        :to="{ name: 'createBook'}"
-        class="py-2 px-4 bg-gradient-to-r from-purple-400  to-green-500 hover:from-pink-500 hover:to-yellow-500 w-full "
-    >📚<span class="hidden md:inline"> - Ajouter un livre</span>
-    </router-link>
-    <router-link
-        class="py-2 px-4 bg-gradient-to-r from-green-500  to-blue-500 hover:from-pink-500 hover:to-yellow-500 w-full"
-        :to="{ name: 'createAuthor'}">💂<span class="hidden  md:inline"> - Ajouter un Auteur</span>
-    </router-link>
-    <router-link
-        class="py-2 px-4 bg-gradient-to-r from-blue-500  to-pink-500 hover:from-pink-500 hover:to-yellow-500 w-full "
-        :to="{ name: 'createCategory'}">🧮<span class="hidden md:inline"> - Ajouter une Categrorie</span>
-    </router-link>
-  </div>
 
-  <div class="container mx-auto text-white">
-    <label for="s">Status</label>
-    <div class="flex">
-      <select name="pets" id="s"
-              v-model="status"
-              class="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-        <option value="">Filter par Status</option>
-        <option v-for="p in ['disponible', 'en_approvisionnement', 'non_édité']" :value="p">{{ p }}</option>
+  <div  v-if="categories?.length&&authors?.length" class="container mx-auto text-white space-y-3">
+    <div class="flex flex-col space-y-2">
+      <label for="s">Filter par Status</label>
+      <div class="flex">
+        <select name="pets" id="s"
+                v-model="status"
+                class="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+          <option v-for="p in ['disponible', 'en_approvisionnement', 'non_édité']" :value="p">{{ p }}</option>
 
-      </select>
-      <button v-if="status" @click="resetStatus" type="button"
-              class=" ml-4  py-2 px-4 flex justify-center  items-center  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white  transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  w-12 h-12 rounded-lg ">
-        <svg class="h-12 w-12 text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-             stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-          <path stroke="none" d="M0 0h24v24H0z"/>
-          <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -5v5h5"/>
-          <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 5v-5h-5"/>
-        </svg>
-      </button>
+        </select>
+        <button v-if="status" @click="resetStatus" type="button"
+                class=" ml-4  py-2 px-4 flex justify-center  items-center  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200  transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  w-12 h-12 rounded-lg ">
+          <svg class="h-12 w-12 " width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+               stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z"/>
+            <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -5v5h5"/>
+            <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 5v-5h-5"/>
+          </svg>
+        </button>
+      </div>
     </div>
 
-    <label for="c">Category</label>
-    <div class="flex">
-      <select id="c"
-              v-model="category"
-              class="w-full bg-gray-800   rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-        <option value="">Filter par Categorie</option>
-        <option v-for="c in categories" :value="c.id">{{ c.title }}</option>
-      </select>
-      <button v-if="category" @click="resetCategory" type="button"
-              class=" ml-4  py-2 px-4 flex justify-center  items-center  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white  transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  w-12 h-12 rounded-lg ">
-        <svg class="h-12 w-12 text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-             stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-          <path stroke="none" d="M0 0h24v24H0z"/>
-          <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -5v5h5"/>
-          <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 5v-5h-5"/>
-        </svg>
-      </button>
+    <div v-if="categories" class="flex flex-col space-y-2">
+      <label for="c">Filter par Categorie</label>
+      <div class="flex">
+        <select id="c"
+                v-model="category"
+                class="w-full bg-gray-800   rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+          <option v-for="c in categories" :value="c">{{ c.title }}</option>
+        </select>
+
+        <button v-if="category?.id" @click="resetCategory" type="button"
+                class=" ml-4  py-2 px-4 flex justify-center  items-center  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200   transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  w-12 h-12 rounded-lg ">
+          <svg class="h-12 w-12" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+               stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z"/>
+            <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -5v5h5"/>
+            <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 5v-5h-5"/>
+          </svg>
+        </button>
+      </div>
     </div>
 
-    <label for="a">Author</label>
-    <div class="flex">
-      <select v-model="author" id="a"
-              class="w-full bg-gray-800   rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-        <option value="">Filter par Auteur</option>
-        <option v-for="author in authors" :value="author.id">{{ author.first_name }}
-          {{ author.last_name }}
-        </option>
-      </select>
-      <button v-if="author" @click="resetAuthor" type="button"
-              class=" ml-4 py-2 px-4 flex justify-center  items-center  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white  transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  w-12 h-12 rounded-lg ">
-        <svg class="h-12 w-12 text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-             stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-          <path stroke="none" d="M0 0h24v24H0z"/>
-          <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -5v5h5"/>
-          <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 5v-5h-5"/>
-        </svg>
-      </button>
+    <div v-if="authors" class="flex flex-col space-y-2">
+      <label for="a">Filter par Auteur</label>
+      <div class="flex">
+        <select v-model="author" id="a"
+                class="w-full bg-gray-800   rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+          <option v-for="author in authors" :value="author">{{ author.first_name + " " + author.last_name }}</option>
+        </select>
+
+        <button v-if="author?.id" @click="resetAuthor" type="button"
+                class=" ml-4 py-2 px-4 flex justify-center  items-center  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200   transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  w-12 h-12 rounded-lg ">
+          <svg class="h-12 w-12" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+               stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z"/>
+            <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -5v5h5"/>
+            <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 5v-5h-5"/>
+          </svg>
+        </button>
+      </div>
     </div>
 
     <label class="inline-flex ml-4 items-center mt-3">
@@ -82,7 +69,6 @@
         Edition
       </span>
     </label>
-
   </div>
 
   <div v-if="filteredBook"
@@ -91,18 +77,20 @@
                v-for="b in filteredBook"
                v-bind:key="b.id" :book="b"/>
   </div>
-  <div v-else-if="status||author||category"
+
+  <div v-else-if="status||author?.first_name||category?.title"
        class="flex flex-col items-center justify-center mt-10 text-2xl text-gray-100 space-y-4">
     <div class="text-5xl">Pas de Livre Trouvé 🥴</div>
     <div>Les critères de recheche :</div>
     <div v-if="status">{{ status }}</div>
-    <div v-if="author" class="flex space-x-4">
-      <div>L'auteur - {{ author }}</div>
+    <div v-if="author.first_name" class="flex space-x-4">
+      <div>L'auteur - {{ author.first_name }} {{ author.last_name }}</div>
       <router-link
           v-if="edition"
+          @click="$store.commit('setCurrentAuthor',author)"
           class="bg-red-500 block text-white hover:bg-red-600 active:bg-red-600 font-bold uppercase text-xs px-2 py-1 rounded-md shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
           type="button"
-          :to="{ name: 'editAuthor', params: { id: author}}">
+          :to="{ name: 'editAuthor', params: { id: author.id}}">
         <svg class="h-4 w-4 text-white" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
              stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z"/>
@@ -112,13 +100,14 @@
         </svg>
       </router-link>
     </div>
-    <div v-if="category" class="flex space-x-4">
-      <div> La catégorie - {{ category }}</div>
+    <div v-if="category.title" class="flex space-x-4">
+      <div> La catégorie - {{ category.title }}</div>
       <router-link
           v-if="edition"
+          @click="$store.commit('setCurrentCategory',category)"
           class="bg-indigo-500 block text-white hover:bg-indigo-600 active:bg-indigo-600 font-bold uppercase text-xs px-2 py-1 rounded-md shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
           type="button"
-          :to="{ name: 'editCategory', params: { id: category}}">
+          :to="{ name: 'editCategory', params: { id: category.id}}">
         <svg class="h-4 w-4 text-white" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
              stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z"/>
@@ -129,10 +118,10 @@
       </router-link>
     </div>
   </div>
+
 </template>
 
 <script>
-import axios from "axios";
 import CardBook from "../../components/CardBook.vue";
 
 export default {
@@ -143,33 +132,24 @@ export default {
   data: () => {
     return {
       edition: false,
-      author: "",
-      category: "",
-      status: "",
+      author: null,
+      category: null,
+      status: null,
     }
   },
   async mounted() {
-    const headers = {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer CCDENpQR0aX6hqBAARH0UbKk2tAtdf6pF8QrZb6N'
-    };
-
-    ['categories', 'authors', 'books']
-        .filter(e => !this[e])
-        .forEach(el =>
-            axios.get(`http://127.0.0.1:8000/api/${el}/`, {headers: headers})
-                .then((r) => this.$store.commit('hydrate' + el.charAt(0).toUpperCase() + el.slice(1), r.data.data))
-                .catch((e) => this.$store.commit('setError', e)));
+    this.author = {id: null};
+    this.category = {id: null};
   },
   methods: {
     resetStatus() {
-      this.status = "";
+      this.status = null;
     },
     resetCategory() {
-      this.category = "";
+      this.category = {id: null};
     },
     resetAuthor() {
-      this.author = "";
+      this.author = {id: null};
     },
     filterCat(payload) {
       this.category = payload.category;
@@ -181,11 +161,11 @@ export default {
     filteredBook() {
       if (this.books) {
         let toFilter = this.books;
-        if (this.author) {
-          toFilter = toFilter.filter(b => b.author.id === this.author)
+        if (this.author?.id) {
+          toFilter = toFilter.filter(b => b.author.id === this.author.id)
         }
-        if (this.category) {
-          toFilter = toFilter.filter(b => b.category.id === this.category)
+        if (this.category?.id) {
+          toFilter = toFilter.filter(b => b.category.id === this.category.id)
         }
         if (this.status) {
           toFilter = toFilter.filter(b => b.status === this.status)
@@ -202,11 +182,7 @@ export default {
     categories() {
       return this.$store.getters.getCategories
     },
-
   }
 }
+
 </script>
-
-<style scoped>
-
-</style>
