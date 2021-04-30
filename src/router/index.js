@@ -1,13 +1,14 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import Books from "../views/Book/Books.vue";
-import BooksAdd from "../views/Book/BooksAdd.vue";
-import BooksEdit from "../views/Book/BooksEdit.vue";
 
-import AuthorAdd from "../views/Author/AuthorAdd.vue";
-import AuthorEdit from "../views/Author/AuthorEdit.vue";
+import Books from "@/views/Book/Books.vue";
+import BooksAdd from "@/views/Book/BooksAdd.vue";
+import BooksEdit from "@/views/Book/BooksEdit.vue";
 
-import CategoryAdd from "../views/Category/CategoryAdd.vue";
-import CategoryEdit from "../views/Category/CategoryEdit.vue";
+import AuthorAdd from "@/views/Author/AuthorAdd.vue";
+import AuthorEdit from "@/views/Author/AuthorEdit.vue";
+
+import CategoryAdd from "@/views/Category/CategoryAdd.vue";
+import CategoryEdit from "@/views/Category/CategoryEdit.vue";
 
 const routes = [
     {

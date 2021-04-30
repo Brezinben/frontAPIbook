@@ -1,15 +1,4 @@
 <template>
-  <div v-if="error" class="bg-red-200 border-red-600 text-red-600 border-l-4 p-4" role="alert">
-    <p class="font-bold">Be Warned</p>
-    <p>Something not ideal might be happening.</p>
-    <br>
-    <p>{{ error }}</p>
-  </div>
-  <div v-if="created" class="bg-green-200 border-green-600 text-green-600 border-l-4 p-4" role="alert">
-    <p class="font-bold">Bravo !!</p>
-    <p>{{ created }}</p>
-  </div>
-
   <div class=" container mx-auto text-gray-100">
 
     <label class="form-label" for="t">Prénom</label>
@@ -51,8 +40,6 @@ export default {
   ,
   data() {
     return {
-      error: null,
-      created: null,
       author: {
         first_name: null,
         last_name: null,
@@ -75,10 +62,9 @@ export default {
               this.author.last_name = null;
               this.author.birth_date = null;
               this.author.death_date = null;
-              this.$emit('author-created');
-              this.created = "L'auteur a été crée.";
+              this.$store.commit('setCreated', "L'auteura été crée.");
             })
-            .catch((e) => this.error = e)
+            .catch((e) => this.$store.commit('setError', e))
       }
     },
   },

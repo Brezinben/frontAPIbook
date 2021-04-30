@@ -4,10 +4,11 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "rok": "ngrok http 3000",
+    "api": "cd C:\\laragon\\www\\bookAPI && php artisan serve"
   },
   "dependencies": {
-    "axios": "^0.21.1",
     "sass": "^1.32.12",
     "vue": "^3.0.5",
     "vue-router": "^4.0.0-0",

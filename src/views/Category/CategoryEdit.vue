@@ -1,10 +1,4 @@
 <template>
-  <div v-if="error" class="bg-red-200 border-red-600 text-red-600 border-l-4 p-4" role="alert">
-    <p class="font-bold">Be Warned</p>
-    <p>Something not ideal might be happening.</p>
-    <br>
-    <p>{{ error }}</p>
-  </div>
 
   <div v-if="category" class=" container mx-auto text-gray-100">
     <label class="form-label" for="t">Title</label>
@@ -42,7 +36,6 @@ export default {
   name: "CategoryEdit",
   data() {
     return {
-      error: null,
       category: null,
       bookCount: null
     }
@@ -52,7 +45,7 @@ export default {
           this.category = r.data.data;
           this.bookCount = this.category?.books?.length ? this.category.books.length : 0;
         })
-        .catch((e) => this.error = e)
+        .catch((e) => this.$store.commit('setError', e))
   },
   methods: {
     saveCharacter() {
@@ -61,19 +54,19 @@ export default {
           "title": this.category.title,
         }, {headers: headers})
             .then((r) => {
-              this.$emit('category-updated');
+              this.$store.commit('setUpdated', "La categorie a bien été modifier");
               this.$router.go(-1)
             })
-            .catch((e) => this.error = e)
+            .catch((e) => this.$store.commit('setError', e))
       }
     },
     deleteCategory() {
       axios.delete(`http://127.0.0.1:8000/api/categories/${this.$route.params.id}`, {headers: headers})
           .then((r) => {
-            this.$emit('category-deleted', {message: "La catégorie a bien été suprimer"});
+            this.$store.commit('setUpdated', "La categorie a bien été supprimer");
             this.$router.go(-1)
           })
-          .catch((e) => this.error = e)
+          .catch((e) => this.$store.commit('setError', e))
     }
   },
 }

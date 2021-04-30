@@ -1,14 +1,4 @@
 <template>
-  <div v-if="error" class="bg-red-200 border-red-600 text-red-600 border-l-4 p-4" role="alert">
-    <p class="font-bold">Be Warned</p>
-    <p>Something not ideal might be happening.</p>
-    <br>
-    <p>{{ error }}</p>
-  </div>
-  <div v-if="created" class="bg-green-200 border-green-600 text-green-600 border-l-4 p-4" role="alert">
-    <p class="font-bold">Bravo !!</p>
-    <p>{{ created }}</p>
-  </div>
 
   <div class=" container mx-auto text-gray-100">
 
@@ -67,10 +57,6 @@ export default {
   ,
   data() {
     return {
-      error: null,
-      created: null,
-      authors: null,
-      categories: null,
       book: {
         title: null,
         publishDate: null,
@@ -79,13 +65,6 @@ export default {
         author: null,
       },
     }
-  },
-  mounted() {
-    ['categories', 'authors'].forEach(el =>
-        axios.get(`http://127.0.0.1:8000/api/${el}/`, {headers: headers})
-            .then((r) => this[el] = r.data.data)
-            .catch((e) => this.error = e)
-    );
   },
   methods: {
     saveCharacter() {
@@ -103,13 +82,21 @@ export default {
               this.book.status = null;
               this.book.category = null;
               this.book.author = null;
-              this.$emit('book-created');
-              this.created = "Le livre a été crée.";
+
+              this.$store.commit('setCreated', "Le livre a été crée.");
             })
-            .catch((e) => this.error = e)
+            .catch((e) => this.$store.commit('setError', e))
       }
     },
   },
+  computed: {
+    authors() {
+      return this.$store.getters.getAuthors
+    },
+    categories() {
+      return this.$store.getters.getCategories
+    },
+  }
 }
 </script>
 

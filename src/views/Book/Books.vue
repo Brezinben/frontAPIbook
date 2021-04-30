@@ -1,10 +1,4 @@
 <template>
-  <div v-if="error" class="bg-red-200 border-red-600 text-red-600 border-l-4 p-4" role="alert">
-    <p class="font-bold">Be Warned</p>
-    <p>Something not ideal might be happening.</p>
-    <br>
-    <p>{{ error }}</p>
-  </div>
   <div
       class="flex mb-6 text-white  transition ease-in duration-200 text-center text-4xl md:text-base font-semibold shadow-md focus:outline-none">
     <router-link
@@ -134,7 +128,6 @@
         </svg>
       </router-link>
     </div>
-
   </div>
 </template>
 
@@ -149,10 +142,6 @@ export default {
   },
   data: () => {
     return {
-      books: null,
-      error: null,
-      authors: null,
-      categories: null,
       edition: false,
       author: "",
       category: "",
@@ -165,17 +154,12 @@ export default {
       'Authorization': 'Bearer CCDENpQR0aX6hqBAARH0UbKk2tAtdf6pF8QrZb6N'
     };
 
-    //ramène les infos des categories et des auteurs
-    ['categories', 'authors'].forEach(el =>
-      axios.get(`http://127.0.0.1:8000/api/${el}/`, {headers: headers})
-        .then((r) => this[el] = r.data.data)
-      .catch((e) => this.error = e));
-
-
-    //récupère les livres
-    axios.get('http://127.0.0.1:8000/api/books', {headers: headers})
-        .then((r) => this.books = r.data.data)
-        .catch((error) => this.error = JSON.stringify(error));
+    ['categories', 'authors', 'books']
+        .filter(e => !this[e])
+        .forEach(el =>
+            axios.get(`http://127.0.0.1:8000/api/${el}/`, {headers: headers})
+                .then((r) => this.$store.commit('hydrate' + el.charAt(0).toUpperCase() + el.slice(1), r.data.data))
+                .catch((e) => this.$store.commit('setError', e)));
   },
   methods: {
     resetStatus() {
@@ -209,6 +193,16 @@ export default {
         return toFilter.length ? toFilter : null;
       }
     },
+    books() {
+      return this.$store.getters.getBooks
+    },
+    authors() {
+      return this.$store.getters.getAuthors
+    },
+    categories() {
+      return this.$store.getters.getCategories
+    },
+
   }
 }
 </script>

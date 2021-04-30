@@ -8,7 +8,7 @@
       </div>
       <router-link
           v-if="edition"
-          class="bg-yellow-500 block text-white hover:bg-yellow-600 active:bg-yellow-600 font-bold uppercase text-xs px-4 py-2 rounded-md shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+          class="bg-yellow-500 block text-white hover:bg-yellow-600 active:bg-yellow-600 font-bold uppercase text-xs px-4 py-2 rounded-md shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
           type="button"
           :to="{ name: 'editBook', params: { id: book.id }}">
         <svg class="h-4 w-4 text-white" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -28,7 +28,7 @@
         </h2>
         <router-link
             v-if="edition"
-            class="bg-indigo-500 block text-white hover:bg-indigo-600 active:bg-indigo-600 font-bold uppercase text-xs px-2 py-1 rounded-md shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+            class="bg-indigo-500 block text-white hover:bg-indigo-600 active:bg-indigo-600 font-bold uppercase text-xs px-2 py-1 rounded-md shadow hover:shadow-md outline-none focus:outline-none -mt-3 ease-linear transition-all duration-150"
             type="button"
             :to="{ name: 'editCategory', params: { id: book.category.id }}">
           <svg class="h-4 w-4 text-white" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -55,7 +55,7 @@
         </span>
         <router-link
             v-if="edition"
-            class="bg-red-500 block text-white hover:bg-red-600 active:bg-red-600 font-bold uppercase text-xs px-2 py-1 rounded-md shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+            class="bg-red-500 block text-white hover:bg-red-600 active:bg-red-600 font-bold uppercase text-xs px-2 py-1 rounded-md shadow hover:shadow-md outline-none focus:outline-none  ease-linear transition-all duration-150"
             type="button"
             :to="{ name: 'editAuthor', params: { id: book.author.id }}">
           <svg class="h-4 w-4 text-white" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"

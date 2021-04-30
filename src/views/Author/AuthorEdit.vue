@@ -1,10 +1,5 @@
 <template>
-  <div v-if="error" class="bg-red-200 border-red-600 text-red-600 border-l-4 p-4" role="alert">
-    <p class="font-bold">Be Warned</p>
-    <p>Something not ideal might be happening.</p>
-    <br>
-    <p>{{ error }}</p>
-  </div>
+
   <div v-if="author" class=" container mx-auto text-gray-100">
 
     <label class="form-label" for="t">Prénom</label>
@@ -54,7 +49,6 @@ export default {
   name: "AuthorEdit",
   data() {
     return {
-      error: null,
       author: null,
       bookCount: null
     }
@@ -64,7 +58,7 @@ export default {
           this.author = r.data.data;
           this.bookCount = this.author?.books?.length ? this.author.books.length : 0;
         })
-        .catch((e) => this.error = e)
+        .catch((e) => this.$store.commit('setError', e))
   },
   methods: {
     saveCharacter() {
@@ -76,19 +70,19 @@ export default {
           "death_date": this.author.death_date,
         }, {headers: headers})
             .then((r) => {
-              this.$emit('author-updated');
+              this.$store.commit('setUpdated', "L'auteur a été modifier.");
               this.$router.go(-1)
             })
-            .catch((e) => this.error = e)
+            .catch((e) => this.$store.commit('setError', e))
       }
     },
     deleteAuthor() {
       axios.delete(`http://127.0.0.1:8000/api/authors/${this.$route.params.id}`, {headers: headers})
           .then((r) => {
-            this.$emit('author-deleted', {message: "L'auteur a bien été suprimer"});
+            this.$store.commit('setUpdated', "L'auteur a été supprimer.");
             this.$router.go(-1)
           })
-          .catch((e) => this.error = e)
+          .catch((e) => this.$store.commit('setError', e))
     }
   },
 }

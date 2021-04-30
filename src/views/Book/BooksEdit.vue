@@ -1,10 +1,4 @@
 <template>
-  <div v-if="error" class="bg-red-200 border-red-600 text-red-600 border-l-4 p-4" role="alert">
-    <p class="font-bold">Be Warned</p>
-    <p>Something not ideal might be happening.</p>
-    <br>
-    <p>{{ error }}</p>
-  </div>
 
   <div v-if="book" class=" container mx-auto text-gray-100">
     <label class="form-label" for="t">Titre</label>
@@ -68,22 +62,12 @@ export default {
   name: "BooksEdit",
   data() {
     return {
-      error: null,
-      updated: null,
       book: null,
-      authors: null,
-      categories: null,
     }
   }, mounted() {
-    ['categories', 'authors'].forEach(el =>
-        axios.get(`http://127.0.0.1:8000/api/${el}/`, {headers: headers})
-            .then((r) => this[el] = r.data.data)
-            .catch((e) => this.error = e)
-    );
-
     axios.get(`http://127.0.0.1:8000/api/books/${this.$route.params.id}`, {headers: headers})
         .then((r) => this.book = r.data.data)
-        .catch((e) => this.error = e)
+        .catch((e) => this.$store.commit('setError', e))
   },
   methods: {
     saveCharacter() {
@@ -96,23 +80,32 @@ export default {
           'author_id': this.book.author.id,
         }, {headers: headers})
             .then((r) => {
-              this.$emit('book-updated');
+              this.$store.commit('setUpdated', "Le livre a bien été modifier");
               this.$router.go(-1)
             })
-            .catch((e) => this.error = e)
+            .catch((e) => this.$store.commit('setError', e))
       }
     },
     deleteBook() {
       if (confirm("Vous êtes sûr ?")) {
         axios.delete(`http://127.0.0.1:8000/api/books/${this.$route.params.id}`, {headers: headers})
             .then((r) => {
-              this.$emit('book-deleted', {message: "Le livre a bien été suprimer"});
+              this.$store.commit('setUpdated', "Le livre a bien été suprimer");
               this.$router.go(-1)
             })
-            .catch((e) => this.error = e)
+            .catch((e) => this.$store.commit('setError', e))
       }
     },
   },
+
+  computed: {
+    authors() {
+      return this.$store.getters.getAuthors
+    },
+    categories() {
+      return this.$store.getters.getCategories
+    },
+  }
 }
 </script>
 
