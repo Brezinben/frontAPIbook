@@ -108,9 +108,11 @@ export default {
   },
   methods: {
     emitChangeAuthor() {
+      delete this.book.author?.books;
       this.$emit('change-filter-author', {author: this.book.author})
     },
     emitChangeCategory() {
+      delete this.book.category?.books;
       this.$emit('change-filter-category', {category: this.book.category})
     }
   }

@@ -1,9 +1,9 @@
 <template>
   <div
-    tabindex="0"
-    @keypress.enter="$emit('click', $event)"
-    @click="$emit('click', $event)"
-    :class="`flex justify-center items-center text-center cursor-pointer ${
+      tabindex="0"
+      @keypress.enter="$emit('click', $event)"
+      @click="$emit('click', $event)"
+      :class="`flex justify-center items-center text-center cursor-pointer ${
       bgColors[color]
     } ${textColors[color]} rounded ${small ? 'px-3 py-1' : 'px-4 py-2'} ${
       full ? 'w-full' : 'w-max-min'

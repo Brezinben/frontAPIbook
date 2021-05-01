@@ -66,7 +66,7 @@ export default {
           'category_id': this.book.category.id,
           'author_id': this.book.author.id,
         }, {headers: this.$store.state.headers})
-            .then( r => {
+            .then(r => {
               this.$store.state.authors = null;
               this.$store.state.categories = null;
               this.$store.state.books = null;
@@ -79,7 +79,7 @@ export default {
     deleteBook() {
       if (confirm("Vous êtes sûr ?")) {
         axios.delete(`http://127.0.0.1:8000/api/books/${this.$route.params.id}`, {headers: this.$store.state.headers})
-            .then( r => {
+            .then(r => {
               this.$store.state.authors = null;
               this.$store.state.categories = null;
               this.$store.state.books = null;

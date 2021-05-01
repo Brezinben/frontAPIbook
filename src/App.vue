@@ -74,7 +74,7 @@
     </div>
 
     <div class="mt-6">
-        <router-view/>
+      <router-view/>
     </div>
   </main>
 </template>
@@ -95,7 +95,7 @@ export default {
           .forEach(el =>
               axios.get(`http://127.0.0.1:8000/api/${el}/`, {headers: this.$store.state.headers})
                   //Viens hydrater les valeurs dans le store
-                  .then( r => this.$store.commit('hydrate' + el.charAt(0).toUpperCase() + el.slice(1), r.data.data))
+                  .then(r => this.$store.commit('hydrate' + el.charAt(0).toUpperCase() + el.slice(1), r.data.data))
                   .catch((e) => this.$store.commit('setError', e))
           );
     }

@@ -1,6 +1,6 @@
 <template>
 
-  <div  v-if="categories?.length&&authors?.length" class="container mx-auto text-white space-y-3">
+  <div v-if="categories?.length&&authors?.length" class="container mx-auto text-white space-y-3">
     <div class="flex flex-col space-y-2">
       <label for="s">Filter par Status</label>
       <div class="flex">

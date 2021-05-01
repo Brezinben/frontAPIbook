@@ -9,6 +9,7 @@
     "api": "cd C:\\laragon\\www\\bookAPI && php artisan serve"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "sass": "^1.32.12",
     "vue": "^3.0.5",
     "vue-router": "^4.0.0-0",

@@ -20,7 +20,7 @@ export default createStore({
         //Header des requêtes axios
         headers: {
             'Accept': 'application/json',
-            'Authorization': 'Bearer CCDENpQR0aX6hqBAARH0UbKk2tAtdf6pF8QrZb6N'
+            'Authorization': 'Bearer PeCn8VTLYXlwuUMnc10pnIliUT9u2L7dCoOCiubU'
         }
     },
     mutations: {
