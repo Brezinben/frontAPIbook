@@ -26,13 +26,14 @@ export default createStore({
     mutations: {
         hydrateBooks: (state, books) => state.books = books,
         //Viens enlever la clé books en +
-        hydrateCategories: (state, categories) => state.categories = categories.filter(c => c.books?.length).map(c => {
-            delete c.books;
+        hydrateCategories: (state, categories) => state.categories = categories.map(c => {
+            delete c?.books;
             return c;
         }),
         //Viens enlever la clé books en +
-        hydrateAuthors: (state, authors) => state.authors = authors.filter(a => a.books?.length).map(a => {
-            delete a.books;
+        hydrateAuthors: (state, authors) => state.authors = authors.map(a => {
+            console.log(a);
+            delete a?.books;
             return a;
         }),
 
