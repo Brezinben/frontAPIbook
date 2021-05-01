@@ -121,7 +121,7 @@ export default {
 
 <style lang="scss" scoped>
 .book__card {
-  @apply py-8  px-4 rounded-sm flex items-start bg-gray-800 col-span-3;
+  @apply py-8  px-4 rounded-sm flex items-start bg-gray-800 overflow-x-hidden col-span-3;
   &:hover {
     transition-duration: 200ms;
     filter: drop-shadow(0px -3mm 10mm #212d46);
