@@ -1,13 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <link href="/favicon.ico" rel="icon"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>---</title>
-  </head>
-  <body  class="bg-gray-900">
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+</head>
+<body class="bg-gray-900">
+
+<div class="scrollbar__indication">
+    <div class="scrollbar__container">
+        <div id="sc" class="scrollbar__progress"></div>
+    </div>
+</div>
+
+<div id="app"></div>
+
+<script src="/src/main.js" type="module"></script>
+</body>
+<script>
+    window.onscroll = () => {
+        //Calcule le % de page parcouru
+        let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        let scrolled = (winScroll / height) * 100;
+        document.getElementById("sc").style.width = scrolled + "%";
+    };
+</script>
 </html>
+
