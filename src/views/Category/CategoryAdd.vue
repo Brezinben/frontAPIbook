@@ -1,12 +1,9 @@
 <template>
   <div class=" container mx-auto text-gray-100">
 
-    <label class="form-label" for="t">Title</label>
-    <input id="t" v-model="category.title"
-           class="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-           type="text">
+    <form-category :category="category"/>
 
-    <button @click="saveCharacter"
+    <button @click="add"
             class="mt-5 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
             type="submit">Ajouter
     </button>
@@ -15,9 +12,13 @@
 </template>
 <script>
 import axios from "axios";
+import FormCategory from "@/components/form/FormCategory.vue";
 
 export default {
-  name: "CategoryAdd"
+  name: "CategoryAdd",
+  components: {
+    FormCategory,
+  }
   ,
   data() {
     return {
@@ -27,25 +28,54 @@ export default {
     }
   },
   methods: {
-    saveCharacter() {
-      if (this.category.title) {
+    /**
+     * Vérifie que le "formulaire" est bon
+     * @return boolean
+     * */
+    checkForm(event) {
+      //On reset les erreurs
+      this.$store.state.errorsForm = [];
+      //condition
+      if (this.category.title) return true
+
+      this.$store.commit({
+        type: 'setAlert',
+        alert: {
+          type: 'warning',
+          message: "Il y a une erreur dans le formulaire.",
+          header: "Attention!!",
+        }
+      });
+      this.$store.state.errorsForm.title = "Le titre est requis.";
+      event.preventDefault();
+      return false;
+    },
+    /**
+     * Rajoute une catégorie.
+     * @return void
+     * */
+    add(event) {
+      if (this.checkForm(event)) {
         axios.post("http://127.0.0.1:8000/api/categories/", {
           "title": this.category.title,
         }, {headers: this.$store.state.headers})
             .then(() => {
-              this.category.title = null;
+              //Reset les attributs
+              Object.getOwnPropertyNames(this.category).forEach(p => this.category[p] = null);
 
-              this.$store.state.categories = null;
-              this.$store.state.books = null;
-              this.$store.commit('setCreated', "La catégorie a été crée.");
+              this.$store.state.categories = this.$store.state.books = null;
+              this.$store.commit({
+                type: 'setAlert',
+                alert: {
+                  type: 'created',
+                  message: "La catégorie a été crée.",
+                  header: "Bravo!!",
+                }
+              });
             })
-            .catch(e => this.$store.commit('setError', e))
+            .catch(e => this.$store.commit('setErrorFrom', e))
       }
     },
   },
 }
 </script>
-
-<style scoped>
-
-</style>

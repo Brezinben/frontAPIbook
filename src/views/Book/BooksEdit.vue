@@ -1,47 +1,14 @@
 <template>
 
   <div v-if="book" class=" container mx-auto text-gray-100">
-    <label class="form-label" for="t">Titre</label>
-    <input id="t" v-model="book.title"
-           class="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-           type="text">
-
-    <label class="form-label" for="p">Publish Date</label>
-    <input id="p" v-model="book.publish_date" type="date"
-           class="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-
-    <label for="s">Status</label>
-    <select name="pets" id="s"
-            v-model="book.status"
-            class="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-      <option v-for="p in ['disponible', 'en_approvisionnement', 'non_édité']" :value="p">{{ p }}</option>
-
-    </select>
-
-    <label for="c">Category</label>
-    <select id="c"
-            v-model="book.category.id"
-            class="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-      <option v-for="category in categories" :value="category.id">
-        {{ category.id }} - {{ category.title }}
-      </option>
-    </select>
-
-    <label for="a">Author</label>
-    <select id="a"
-            v-model="book.author.id"
-            class="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-      <option v-for="author in authors" :value="author.id">
-        {{ author.id }} - {{ author.first_name }} {{ author.last_name }}
-      </option>
-    </select>
+    <form-book :book="book"/>
 
     <div class="flex">
-      <button @click="saveCharacter"
+      <button @click="update"
               class="mt-5 mr-5 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
               type="submit">Modifier
       </button>
-      <button @click="deleteBook"
+      <button @click="delete"
               class="mt-5 text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded text-lg"
               type="submit">Suprimer
       </button>
@@ -52,13 +19,42 @@
 </template>
 
 <script>
+import FormBook from "@/components/form/FormBook.vue";
 import axios from "axios";
 
 export default {
   name: "BooksEdit",
+  components: {FormBook},
   methods: {
-    saveCharacter() {
-      if (this.book.title && this.book.publish_date && this.book.category.id && this.book.author.id && this.book.status) {
+    /**
+     * Vérifie que le "formulaire" est bon
+     * @return boolean
+     * */
+    checkForm(event) {
+      //On reset les erreurs
+      this.$store.state.errorsForm = [];
+      //condition
+      if (this.book.title && this.book.publish_date && this.book.category && this.book.author && this.book.status) return true
+
+      this.$store.commit({
+        type: 'setAlert',
+        alert: {
+          type: 'warning',
+          message: "Il y a une erreur dans le formulaire.",
+          header: "Attention!!",
+        }
+      });
+      if (!this.book.title) this.$store.state.errorsForm.title = "Le prénom est requis.";
+      if (!this.book.publish_date) this.$store.state.errorsForm.publish_date = "La date de publication est requis.";
+      if (!this.book.category) this.$store.state.errorsForm.category = "La catégorie est requis.";
+      if (!this.book.author) this.$store.state.errorsForm.author = "L'auteur est requis.";
+      if (!this.book.status) this.$store.state.errorsForm.status = "Le status est requis.";
+      event.preventDefault();
+      return false;
+    },
+    /** Met à jour un livre.*/
+    update(event) {
+      if (this.checkForm(event)) {
         axios.put(`http://127.0.0.1:8000/api/books/${this.book.id}`, {
           "title": this.book.title,
           "publish_date": this.book.publish_date,
@@ -67,26 +63,36 @@ export default {
           'author_id': this.book.author.id,
         }, {headers: this.$store.state.headers})
             .then(r => {
-              this.$store.state.authors = null;
-              this.$store.state.categories = null;
-              this.$store.state.books = null;
-              this.$store.commit('setUpdated', "Le livre a bien été modifier");
+              this.$store.state.authors = this.$store.state.categories = this.$store.state.books = null;
+              this.$store.commit({
+                type: 'setAlert',
+                alert: {
+                  type: 'updated',
+                  message: "Le livre a bien été modifier",
+                  header: "Bravo !!",
+                }
+              })
               this.$router.push({name: 'books'})
             })
-            .catch(e => this.$store.commit('setError', e))
+            .catch(e => this.$store.commit('setErrorFrom', e))
       }
     },
-    deleteBook() {
+    /** Supprime un livre.*/
+    delete() {
       if (confirm("Vous êtes sûr ?")) {
         axios.delete(`http://127.0.0.1:8000/api/books/${this.$route.params.id}`, {headers: this.$store.state.headers})
             .then(r => {
-              this.$store.state.authors = null;
-              this.$store.state.categories = null;
-              this.$store.state.books = null;
-              this.$store.commit('setUpdated', "Le livre a bien été suprimer");
+              this.$store.state.authors = this.$store.state.categories = this.$store.state.books = null;
+              this.$store.commit({
+                type: 'setAlert',
+                alert: {
+                  type: 'deleted',
+                  message: "Le livre a bien été supprimer",
+                }
+              });
               this.$router.push({name: 'books'})
             })
-            .catch(e => this.$store.commit('setError', e))
+            .catch(e => this.$store.commit('setErrorFrom', e))
       }
     },
   },
@@ -94,12 +100,6 @@ export default {
   computed: {
     book() {
       return this.$store.getters.getCurrentBook
-    },
-    authors() {
-      return this.$store.getters.getAuthors
-    },
-    categories() {
-      return this.$store.getters.getCategories
     },
   }
 }

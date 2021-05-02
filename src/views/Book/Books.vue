@@ -6,12 +6,11 @@
       <div class="flex">
         <select name="pets" id="s"
                 v-model="status"
-                class="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                class="form__input">
           <option v-for="p in ['disponible', 'en_approvisionnement', 'non_édité']" :value="p">{{ p }}</option>
 
         </select>
-        <button v-if="status" @click="resetStatus" type="button"
-                class=" ml-4  py-2 px-4 flex justify-center  items-center  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200  transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  w-12 h-12 rounded-lg ">
+        <button v-if="status" class="reset-field-filter" type="button" @click="resetStatus">
           <svg class="h-12 w-12 " width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
                stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z"/>
@@ -27,12 +26,11 @@
       <div class="flex">
         <select id="c"
                 v-model="category"
-                class="w-full bg-gray-800   rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                class="form__input">
           <option v-for="c in categories" :value="c">{{ c.title }}</option>
         </select>
 
-        <button v-if="category?.id" @click="resetCategory" type="button"
-                class=" ml-4  py-2 px-4 flex justify-center  items-center  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200   transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  w-12 h-12 rounded-lg ">
+        <button v-if="category?.id" class="reset-field-filter" type="button" @click="resetCategory">
           <svg class="h-12 w-12" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
                stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z"/>
@@ -46,13 +44,12 @@
     <div v-if="authors" class="flex flex-col space-y-2">
       <label for="a">Filter par Auteur</label>
       <div class="flex">
-        <select v-model="author" id="a"
-                class="w-full bg-gray-800   rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+        <select id="a" v-model="author" class="form__input">
           <option v-for="author in authors" :value="author">{{ author.first_name + " " + author.last_name }}</option>
         </select>
 
         <button v-if="author?.id" @click="resetAuthor" type="button"
-                class=" ml-4 py-2 px-4 flex justify-center  items-center  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200   transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  w-12 h-12 rounded-lg ">
+                class="reset-field-filter">
           <svg class="h-12 w-12" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
                stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z"/>
@@ -73,7 +70,9 @@
 
   <div v-if="filteredBook"
        class="grid  grid-cols-3 md:grid-cols-6 lg:grid-cols-9 xl:grid-cols-12 gap-6  container mx-auto my-6">
-    <card-book @change-filter-category="filterCat" @change-filter-author="filterAut" :edition="edition"
+    <card-book :edition="edition"
+               @change-filter-category="filterCat"
+               @change-filter-author="filterAut"
                v-for="b in filteredBook"
                v-bind:key="b.id" :book="b"/>
   </div>
@@ -186,3 +185,13 @@ export default {
 }
 
 </script>
+<style scoped>
+.reset-field-filter {
+  @apply ml-4 py-2 px-4 flex justify-center  items-center  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200   transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  w-12 h-12 rounded-lg
+}
+
+.reset-field-filter:hover svg {
+  transform: rotateZ(180deg) scale(1.1);
+  transition-duration: 900ms;
+}
+</style>

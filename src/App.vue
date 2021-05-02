@@ -1,5 +1,6 @@
 <template>
   <main>
+    <header class="scrollIndication"></header>
     <header class="bg-white shadow flex items-center" v-if="$route.meta.title">
       <main-logo/>
       <div class=" py-6 px-4 sm:px-6 lg:px-8">
@@ -27,9 +28,7 @@
 
     </div>
 
-    <alert :alert-status="$store.state.error" first-message="Be Warned" class-style="text-red-700 bg-red-100"/>
-    <alert :alert-status="$store.state.created" first-message="Bravo !!" class-style="text-green-700 bg-green-100"/>
-    <alert :alert-status="$store.state.updated" first-message="Bravo !!" class-style="text-blue-700 bg-blue-100"/>
+    <alert/>
 
     <div class="mt-6">
       <router-view/>
@@ -49,9 +48,13 @@ export default {
   },
   watch: {
     //appeler à chaque route
-    '$route': 'fetchData'
+    '$route': ['fetchData', 'resetAlert']
   },
   methods: {
+    resetAlert() {
+      let state = this.$store.state;
+      state.error = state.created = state.updated = null;
+    },
     fetchData() {
       ['categories', 'authors', 'books']
           //On garde les valeurs qui ont besoin d'être charger
@@ -60,7 +63,14 @@ export default {
               axios.get(`http://127.0.0.1:8000/api/${el}/`, {headers: this.$store.state.headers})
                   //Viens hydrater les valeurs dans le store eg:hydrateBooks
                   .then(r => this.$store.commit('hydrate' + el.charAt(0).toUpperCase() + el.slice(1), r.data.data))
-                  .catch(e => this.$store.commit('setError', e))
+                  .catch(e => this.$store.commit({
+                    type: 'setAlert',
+                    alert: {
+                      type: 'error',
+                      message: e,
+                      header: "Erreur",
+                    }
+                  }))
           )
       ;
     }

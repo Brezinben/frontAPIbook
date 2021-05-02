@@ -12,15 +12,19 @@ export default createStore({
         currentCategory: null,
         currentAuthor: null,
 
-        //les différents statue pour les erreus
-        error: null,
-        updated: null,
-        created: null,
+        alert: {
+            show: false,
+            type: null,
+            message: null,
+            header: null,
+        },
+
+        errorsForm: [],
 
         //Header des requêtes axios
         headers: {
             'Accept': 'application/json',
-            'Authorization': 'Bearer PeCn8VTLYXlwuUMnc10pnIliUT9u2L7dCoOCiubU'
+            'Authorization': 'Bearer MzaU44jOr1dcRk2G423sL8hieaDv6ckkSF8DEZnQ'
         }
     },
     mutations: {
@@ -41,9 +45,26 @@ export default createStore({
         setCurrentCategory: (state, category) => state.currentCategories = state.categories.find(c => c.id === category.id),
         setCurrentAuthor: (state, author) => state.currentAuthors = state.authors.find(a => a.id === author.id),
 
-        setError: (state, e) => state.error = e,
-        setCreated: (state, c) => state.created = c,
-        setUpdated: (state, u) => state.updated = u,
+        setAlert: (state, payload) => {
+            state.alert = {
+                show: true,
+                type: payload.alert.type,
+                message: payload.alert.message,
+                header: payload.alert.header,
+            }
+        },
+
+        setErrorFrom: (state, error) => {
+            //Viens mettre en place les elements pour la comprehension du user
+            let data = error.response.data;
+            state.errorsForm = data.errors;
+            state.alert = {
+                show: true,
+                type: 'error',
+                message: data.message,
+                header: "Erreur",
+            };
+        }
     },
     actions: {},
     modules: {},

@@ -34,8 +34,6 @@ const routes = [
         component: BooksEdit,
         meta: {title: 'Modifier un livre'},
     },
-
-
     {
         name: "createAuthor",
         path: '/authors/add',
@@ -48,7 +46,6 @@ const routes = [
         component: AuthorEdit,
         meta: {title: 'Modifier un Auteur'},
     },
-
     {
         name: "createCategory",
         path: '/categories/add',
