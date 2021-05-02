@@ -32,7 +32,6 @@ export default createStore({
         }),
         //Viens enlever la clé books en +
         hydrateAuthors: (state, authors) => state.authors = authors.map(a => {
-            console.log(a);
             delete a?.books;
             return a;
         }),

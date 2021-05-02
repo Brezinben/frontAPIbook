@@ -62,7 +62,7 @@ export default {
               this.$store.state.books = null;
               this.$store.commit('setCreated', "L'auteur a été crée.");
             })
-            .catch((e) => this.$store.commit('setError', e))
+            .catch(e => this.$store.commit('setError', e))
       }
     },
   },

@@ -45,7 +45,7 @@ export default {
               this.$store.commit('setUpdated', "La categorie a bien été modifier");
               this.$router.push({name: 'books'})
             })
-            .catch((e) => this.$store.commit('setError', e))
+            .catch(e => this.$store.commit('setError', e))
       }
     },
     deleteCategory() {
@@ -57,7 +57,7 @@ export default {
               this.$store.commit('setUpdated', "La categorie a bien été supprimer");
               this.$router.push({name: 'books'})
             })
-            .catch((e) => this.$store.commit('setError', e))
+            .catch(e => this.$store.commit('setError', e))
       }
     }
   },

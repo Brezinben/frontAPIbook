@@ -63,7 +63,7 @@ export default {
               this.$store.commit('setUpdated', "L'auteur a été modifier.");
               this.$router.push({name: 'books'})
             })
-            .catch((e) => this.$store.commit('setError', e))
+            .catch(e => this.$store.commit('setError', e))
       }
     },
     deleteAuthor() {
@@ -76,7 +76,7 @@ export default {
               this.$store.commit('setUpdated', "L'auteur a été supprimer.");
               this.$router.push({name: 'books'})
             })
-            .catch((e) => this.$store.commit('setError', e))
+            .catch(e => this.$store.commit('setError', e))
       }
     }
   },

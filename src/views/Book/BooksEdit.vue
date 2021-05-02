@@ -73,7 +73,7 @@ export default {
               this.$store.commit('setUpdated', "Le livre a bien été modifier");
               this.$router.push({name: 'books'})
             })
-            .catch((e) => this.$store.commit('setError', e))
+            .catch(e => this.$store.commit('setError', e))
       }
     },
     deleteBook() {
@@ -86,7 +86,7 @@ export default {
               this.$store.commit('setUpdated', "Le livre a bien été suprimer");
               this.$router.push({name: 'books'})
             })
-            .catch((e) => this.$store.commit('setError', e))
+            .catch(e => this.$store.commit('setError', e))
       }
     },
   },
