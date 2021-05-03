@@ -1,10 +1,12 @@
-# vite.js + vue3 + vuex + router + tailwindcss template
+# Front-End-Book-Api
+## Techno
+ - vite.js
+ - vue3
+ - vuex
+ - router
+ - tailwindcss
 
-## march 2021
-
-### run serve
+## Init
 - npm i
 - npm run dev
-
-### build
-- npm run build
+Il faut avoir l'api de set-up également : [ici](https://github.com/Brezinben/bookAPI)
