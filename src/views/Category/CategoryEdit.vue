@@ -30,10 +30,12 @@ export default {
   },
   data() {
     return {
-      bookCount: null
+      bookCount: null,
+      tempCategory: null
     }
   }, mounted() {
     this.bookCount = this.category?.book_count ? this.category.book_count : 0;
+    this.tempCategory = {...this.category};
   },
   methods: {
     /**
@@ -41,20 +43,23 @@ export default {
      * @return boolean
      * */
     checkForm(event) {
+      let message;
       //On reset les erreurs
       this.$store.state.errorsForm = [];
+      let unchanged = this.isEqual(this.tempCategory, this.category);
       //condition
-      if (this.category.title) return true
+      if (!unchanged && this.category.title) return true
 
+      if (unchanged) message = "Vous n'avez rien changer."
       this.$store.commit({
         type: 'setAlert',
         alert: {
           type: 'warning',
-          message: "Il y a une erreur dans le formulaire.",
+          message: message || "Il y a une erreur dans le formulaire.",
           header: "Attention!!",
         }
       });
-      this.$store.state.errorsForm.title = "Le titre est requis.";
+      if (!this.category.title) this.$store.state.errorsForm.title = "Le titre est requis.";
       event.preventDefault();
       return false;
     },

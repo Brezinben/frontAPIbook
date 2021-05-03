@@ -13,7 +13,6 @@
               type="submit">Suprimer
       </button>
     </div>
-
   </div>
 
 </template>
@@ -25,22 +24,35 @@ import axios from "axios";
 export default {
   name: "BooksEdit",
   components: {FormBook},
+  data() {
+    return {
+      tempBook: null
+    }
+  },
+  mounted() {
+    this.tempBook = {...this.book};
+  },
   methods: {
     /**
      * Vérifie que le "formulaire" est bon
      * @return boolean
      * */
     checkForm(event) {
+      let message;
       //On reset les erreurs
       this.$store.state.errorsForm = [];
+      //On vérifie qu'il a été modifier
+      let unchanged = this.isEqual(this.tempBook, this.book);
       //condition
-      if (this.book.title && this.book.publish_date && this.book.category && this.book.author && this.book.status) return true
+      if (!unchanged && this.book.title && this.book.publish_date && this.book.category && this.book.author && this.book.status) return true
+
+      if (unchanged) message = "Vous n'avez rien changer."
 
       this.$store.commit({
         type: 'setAlert',
         alert: {
           type: 'warning',
-          message: "Il y a une erreur dans le formulaire.",
+          message: message || "Il y a une erreur dans le formulaire.",
           header: "Attention!!",
         }
       });
@@ -96,7 +108,6 @@ export default {
       }
     },
   },
-
   computed: {
     book() {
       return this.$store.getters.getCurrentBook

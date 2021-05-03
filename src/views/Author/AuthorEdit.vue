@@ -30,11 +30,13 @@ export default {
   components: {FormAuthor},
   data() {
     return {
-      bookCount: null
+      bookCount: null,
+      tempAuthor: null
     }
   },
   mounted() {
     this.bookCount = this.author?.book_count ? this.author.book_count : 0;
+    this.tempAuthor = {...this.author};
   },
   methods: {
     /**
@@ -42,16 +44,20 @@ export default {
      * @return boolean
      * */
     checkForm(event) {
+      let message;
       //On reset les erreurs
       this.$store.state.errorsForm = [];
+      //On vérifie qu'il a été modifier
+      let unchanged = this.isEqual(this.tempAuthor, this.author);
       //condition
-      if (this.author.first_name && this.author.last_name && this.author.birth_date) return true
+      if (!unchanged && this.author.first_name && this.author.last_name && this.author.birth_date) return true
+      if (unchanged) message = "Vous n'avez rien changer."
 
       this.$store.commit({
         type: 'setAlert',
         alert: {
           type: 'warning',
-          message: "Il y a une erreur dans le formulaire.",
+          message: message || "Il y a une erreur dans le formulaire.",
           header: "Attention!!",
         }
       });
