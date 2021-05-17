@@ -27,7 +27,7 @@
       <div class="flex items-center justify-between">
         <h2 @click="emitChangeCategory"
             class=" cursor-pointer tracking-widest text-xs title-font font-medium text-indigo-400 mb-1">
-          {{ book.category.title }}
+          {{ categoryTitle }}
         </h2>
         <transition name="fade">
           <router-link
@@ -47,17 +47,17 @@
         </transition>
       </div>
 
-      <h1 :title="book.title" class="title-font text-xl font-medium text-white mb-3">{{ title }}</h1>
+      <h1 :title="book.title" class="title-font text-xl font-medium text-white mb-3">{{ bookTitle }}</h1>
       <span
           :class="statusClass"
           class=" mb-5 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none rounded">{{
-          book.status.replace("_", " ").toUpperCase()
+          statusName
         }}</span>
       <a class="inline-flex items-center cursor-pointer" @click="emitChangeAuthor">
         <img alt="Une personne qui n'existe pas vraiment" src="https://thispersondoesnotexist.com/image"
              class="w-8 h-8 rounded-full flex-shrink-0 object-cover object-center">
         <span class="flex-grow flex flex-col pl-3">
-                <span class="title-font font-medium text-white">{{ fullName }}</span>
+                <span class="title-font font-medium text-white">{{ authorFullName }}</span>
         </span>
         <transition name="fade">
           <router-link
@@ -92,7 +92,6 @@ export default {
   },
   data() {
     return {
-      fullName: this.book.author.first_name + " " + this.book.author.last_name,
       statusClass: {
         'text-green-100 bg-green-700': this.book.status === "disponible",
         'text-yellow-100 bg-yellow-500': this.book.status === "en_approvisionnement",
@@ -102,8 +101,7 @@ export default {
         day: null,
         month: null,
         year: null,
-      },
-      title: this.book.title.length > 50 ? this.book.title.substr(0, 50) + '...' : this.book.title,
+      }
     }
   },
   methods: {
@@ -114,7 +112,35 @@ export default {
     emitChangeCategory() {
       delete this.book.category?.books;
       this.$emit('change-filter-category', {category: this.book.category})
+    },
+    /**
+     *
+     * @param {string}string la chaine tester
+     * @param {number}length la longueur a tester
+     * @param {number}wantedLength la longeur de la chaine a renvoyer
+     * @returns {string}
+     */
+    stringLimitation(string, length, wantedLength = length) {
+      if (string.length > length) {
+        console.log(string, length, wantedLength);
+        return `${string.substr(0, wantedLength)} ...`;
+      }
+      return string;
     }
+  },
+  computed: {
+    bookTitle() {
+      return this.stringLimitation(this.book.title, 50);
+    },
+    categoryTitle() {
+      return this.stringLimitation(this.book.category.title, 25);
+    },
+    authorFullName() {
+      return this.book.author.first_name + " " + this.book.author.last_name;
+    },
+    statusName() {
+      return this.book.status.replace("_", " ").toUpperCase();
+    },
   }
 }
 </script>
