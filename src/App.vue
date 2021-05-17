@@ -8,26 +8,29 @@
       </div>
     </header>
 
-    <div
-        class="flex text-white  transition ease-in duration-200 text-center text-4xl md:text-base font-semibold shadow-md focus:outline-none">
-      <router-link
-          :to="{ name: 'createBook'}"
-          class="py-2 px-4 bg-gradient-to-r from-purple-400  to-green-500 hover:from-pink-500 hover:to-yellow-500 w-full "
-      >📚<span class="hidden md:inline"> - Ajouter un livre</span>
-      </router-link>
+    <transition name="fade">
+      <div v-if="edition"
+           class="flex text-white  transition ease-in duration-200 text-center text-4xl md:text-base font-semibold shadow-md focus:outline-none">
+        <router-link
+            :to="{ name: 'createBook'}"
+            class="py-2 px-4 bg-gradient-to-r from-purple-400  to-green-500 hover:from-pink-500 hover:to-yellow-500 w-full "
+        >📚<span class="hidden md:inline"> - Ajouter un livre</span>
+        </router-link>
 
-      <router-link
-          class="py-2 px-4 bg-gradient-to-r from-green-500  to-blue-500 hover:from-pink-500 hover:to-yellow-500 w-full"
-          :to="{ name: 'createAuthor'}">💂<span class="hidden  md:inline"> - Ajouter un Auteur</span>
-      </router-link>
+        <router-link
+            :to="{ name: 'createAuthor'}"
+            class="py-2 px-4 bg-gradient-to-r from-green-500  to-blue-500 hover:from-pink-500 hover:to-yellow-500 w-full">
+          💂<span class="hidden  md:inline"> - Ajouter un Auteur</span>
+        </router-link>
 
-      <router-link
-          class="py-2 px-4 bg-gradient-to-r from-blue-500  to-pink-500 hover:from-pink-500 hover:to-yellow-500 w-full "
-          :to="{ name: 'createCategory'}">🧮<span class="hidden md:inline"> - Ajouter une Categrorie</span>
-      </router-link>
+        <router-link
+            :to="{ name: 'createCategory'}"
+            class="py-2 px-4 bg-gradient-to-r from-blue-500  to-pink-500 hover:from-pink-500 hover:to-yellow-500 w-full ">
+          🧮<span class="hidden md:inline"> - Ajouter une Categrorie</span>
+        </router-link>
 
-    </div>
-
+      </div>
+    </transition>
     <alert/>
 
     <div class="mt-6">
@@ -74,6 +77,11 @@ export default {
           )
       ;
     },
+  },
+  computed: {
+    edition() {
+      return this.$store.getters.isEditing
+    }
   }
 }
 </script>

@@ -60,21 +60,16 @@
       </div>
     </div>
 
-    <label class="inline-flex ml-4 items-center mt-3">
-      <input type="checkbox" v-model="edition" class="form-checkbox rounded-md h-5 w-5 text-yellow-400" checked>
-      <span class="ml-2  text-gray-100">
-        Edition
-      </span>
-    </label>
+    <check-token></check-token>
   </div>
 
   <div v-if="filteredBook"
        class="grid  grid-cols-3 md:grid-cols-6 lg:grid-cols-9 xl:grid-cols-12 gap-6  container mx-auto my-6">
-    <card-book :edition="edition"
-               @change-filter-category="filterCat"
-               @change-filter-author="filterAut"
-               v-for="b in filteredBook"
-               v-bind:key="b.id" :book="b"/>
+    <card-book
+        v-for="b in filteredBook"
+        v-bind:key="b.id"
+        :book="b"
+        @change-filter-category="filterCat" @change-filter-author="filterAut"/>
   </div>
 
   <div v-else-if="status||author?.first_name||category?.title"
@@ -122,21 +117,22 @@
 
 <script>
 import CardBook from "../../components/CardBook.vue";
+import CheckToken from "../../components/checkToken.vue";
 
 export default {
   name: "Books",
   components: {
     CardBook,
+    CheckToken,
   },
   data: () => {
     return {
-      edition: false,
       author: null,
       category: null,
       status: null,
     }
   },
-  async mounted() {
+  mounted() {
     this.author = {id: null};
     this.category = {id: null};
   },
@@ -181,6 +177,9 @@ export default {
     categories() {
       return this.$store.getters.getCategories
     },
+    edition() {
+      return this.$store.getters.isEditing
+    }
   }
 }
 

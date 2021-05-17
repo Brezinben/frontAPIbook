@@ -11,6 +11,9 @@ import CategoryAdd from "@/views/Category/CategoryAdd.vue";
 import CategoryEdit from "@/views/Category/CategoryEdit.vue";
 import NotFound from "@/views/NotFound.vue";
 
+import store from "../store/index"
+
+
 const routes = [
     {
         path: '/',
@@ -26,37 +29,37 @@ const routes = [
         name: "createBook",
         path: '/books/add',
         component: BooksAdd,
-        meta: {title: 'Ajouter un livre'},
+        meta: {title: 'Ajouter un livre', requiresAuth: true,},
     },
     {
         name: "editBook",
         path: '/books/edit/:id',
         component: BooksEdit,
-        meta: {title: 'Modifier un livre'},
+        meta: {title: 'Modifier un livre', requiresAuth: true,},
     },
     {
         name: "createAuthor",
         path: '/authors/add',
         component: AuthorAdd,
-        meta: {title: 'Ajouter un Auteur'},
+        meta: {title: 'Ajouter un Auteur', requiresAuth: true,},
     },
     {
         name: "editAuthor",
         path: '/authors/edit/:id',
         component: AuthorEdit,
-        meta: {title: 'Modifier un Auteur'},
+        meta: {title: 'Modifier un Auteur', requiresAuth: true,},
     },
     {
         name: "createCategory",
         path: '/categories/add',
         component: CategoryAdd,
-        meta: {title: 'Ajouter une Catégorie'},
+        meta: {title: 'Ajouter une Catégorie', requiresAuth: true,},
     },
     {
         name: "editCategory",
         path: '/categories/edit/:id',
         component: CategoryEdit,
-        meta: {title: 'Modifier une Catégorie'},
+        meta: {title: 'Modifier une Catégorie', requiresAuth: true,},
     },
 
     {
@@ -68,6 +71,13 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),
     routes
+})
+//
+router.beforeEach((to, from, next) => {
+    if (to.meta.requiresAuth) {
+        if (store.state.editor) next()
+        else next({name: 'books'})
+    } else next()
 })
 
 export default router

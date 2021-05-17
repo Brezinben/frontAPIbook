@@ -12,6 +12,10 @@ export default createStore({
         currentCategory: null,
         currentAuthor: null,
 
+        editor: false,
+        editing: false,
+        token: null,
+
         alert: {
             show: false,
             type: null,
@@ -24,10 +28,20 @@ export default createStore({
         //Header des requêtes axios
         headers: {
             'Accept': 'application/json',
-            'Authorization': 'Bearer MzaU44jOr1dcRk2G423sL8hieaDv6ckkSF8DEZnQ'
+            'Authorization': `Bearer ${this?.token}`,
         }
     },
     mutations: {
+        isEditor: (state, payload) => {
+            if (payload.token) {
+                state.token = payload.token;
+                state.editor = true;
+            } else {
+                state.token = null;
+                state.editor = false;
+            }
+            state.editing = false
+        },
         hydrateBooks: (state, books) => state.books = books,
         //Viens enlever la clé books en +
         hydrateCategories: (state, categories) => state.categories = categories.map(c => {
@@ -76,5 +90,9 @@ export default createStore({
         getCurrentBook: (state) => state.currentBook,
         getCurrentCategory: (state) => state.currentCategories,
         getCurrentAuthor: (state) => state.currentAuthors,
+
+        isEditor: (state) => state.editor,
+        isEditing: (state) => state.editing,
+        getToken: (state) => state.token,
     }
 })

@@ -83,7 +83,7 @@
 <script>
 export default {
   name: "CardBook",
-  props: ["book", "edition"],
+  props: ["book"],
   mounted() {
     let d = new Date(this.book.publish_date);
     this.publish_date.day = new Intl.DateTimeFormat('fr', {day: '2-digit'}).format(d);
@@ -117,12 +117,11 @@ export default {
      *
      * @param {string}string la chaine tester
      * @param {number}length la longueur a tester
-     * @param {number}wantedLength la longeur de la chaine a renvoyer
+     * @param {number}wantedLength la longueur de la chaine a renvoyer
      * @returns {string}
      */
     stringLimitation(string, length, wantedLength = length) {
       if (string.length > length) {
-        console.log(string, length, wantedLength);
         return `${string.substr(0, wantedLength)} ...`;
       }
       return string;
@@ -136,16 +135,20 @@ export default {
       return this.stringLimitation(this.book.category.title, 25);
     },
     authorFullName() {
-      return this.book.author.first_name + " " + this.book.author.last_name;
+      const {first_name, last_name} = this.book.author;
+      return `${first_name} ${last_name}`;
     },
     statusName() {
       return this.book.status.replace("_", " ").toUpperCase();
+    },
+    edition() {
+      return this.$store.getters.isEditing
     },
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .book__card {
   @apply py-8  px-4 rounded-sm flex items-start bg-gray-800 overflow-x-hidden col-span-3;
   &:hover {
