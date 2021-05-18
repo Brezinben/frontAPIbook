@@ -58,11 +58,17 @@ export default {
   },
   methods: {
     resetAlert() {
-      let state = this.$store.state;
-      state.error = state.created = state.updated = null;
+      //On garde que les alertes d'authentification. On devrait mettre ici une constante.
+      if (this.$store.state.alert.message !== "👹 Vous n'êtes pas Authentifier 👹") {
+        this.$store.state.alert = {
+          show: false,
+          type: null,
+          message: null,
+          header: null,
+        }
+      }
     },
     fetchData() {
-      console.log(this.$store.state.token);
       ['categories', 'authors', 'books']
           //On garde les valeurs qui ont besoin d'être charger
           .filter(e => !this.$store.state[e])

@@ -90,27 +90,4 @@ export default {
 </script>
 
 <style scoped>
-.fader-enter,
-.fader-enter-active,
-.fader-enter-to,
-.fader-leave,
-.fader-leave-active,
-.fader-leave-to {
-  transition: all 0.3s;
-}
-
-.fader-enter,
-.fader-enter-active,
-.fader-enter-to {
-  opacity: 0;
-  transform: translateY(100%);
-}
-
-.fader-leave,
-.fader-leave-active,
-.fader-leave-to {
-  opacity: 0;
-  transform: translateY(-100%);
-}
-
 </style>

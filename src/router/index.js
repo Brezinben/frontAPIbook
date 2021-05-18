@@ -85,7 +85,6 @@ router.beforeEach((to, from, next) => {
                     header: "Attention!!",
                 }
             });
-            console.group()
             next({name: 'books'});
         }
     } else next()
