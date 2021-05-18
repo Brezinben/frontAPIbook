@@ -8,12 +8,15 @@
               class="mt-5 mr-5 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
               type="submit">Modifier
       </button>
-      <button v-if="bookCount===0" @click="delete"
+      <button v-if=" isAdmin && bookCount===0 " @click="destroy"
               class="mt-5 text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded text-lg"
               type="submit">Suprimer
       </button>
+      <div v-else-if="bookCount!==0" class="text-yellow-100">
+        Vous ne pouvez pas supprimer cet catégorie car elle est lié à {{ bookCount }} livres.
+      </div>
       <div v-else class="text-yellow-100">
-        Vous ne pouvez pas supprimer cet categorie car elle est lié à {{ bookCount }} livres.
+        Vous ne pouvez pas supprimer cet catégorie, car vous n'êtes pas Admin.
       </div>
     </div>
   </div>
@@ -68,7 +71,7 @@ export default {
       if (this.checkForm(event)) {
         axios.put(`http://127.0.0.1:8000/api/categories/${this.category.id}`, {
           "title": this.category.title,
-        }, {headers: this.$store.state.headers})
+        }, {headers: this.$store.getters.getHeaders})
             .then(r => {
               this.$store.state.categories = null;
               this.$store.state.books = null;
@@ -86,9 +89,9 @@ export default {
       }
     },
     /** Supprime la catégorie et redirect */
-    delete() {
+    destroy() {
       if (confirm("Vous êtes sûr ?")) {
-        axios.delete(`http://127.0.0.1:8000/api/categories/${this.$route.params.id}`, {headers: this.$store.state.headers})
+        axios.delete(`http://127.0.0.1:8000/api/categories/${this.$route.params.id}`, {headers: this.$store.getters.getHeaders})
             .then(r => {
               this.$store.state.categories = null;
               this.$store.state.books = null;
@@ -116,7 +119,10 @@ export default {
   computed: {
     category() {
       return this.$store.getters.getCurrentCategory
-    }
+    },
+    isAdmin() {
+      return this.$store.getters.isAdmin
+    },
   }
 }
 </script>

@@ -8,12 +8,15 @@
               class="mt-5 mr-5 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
               type="submit">Modifier
       </button>
-      <button v-if="bookCount===0" @click="delete"
+      <button v-if=" isAdmin && bookCount===0 " type="submit"
               class="mt-5 text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded text-lg"
-              type="submit">Suprimer
+              @click="destroy">Supprimer
       </button>
-      <div v-else class="text-yellow-100">
+      <div v-else-if="bookCount!==0" class="text-yellow-100">
         Vous ne pouvez pas supprimer cet auteur car il est lié à {{ bookCount }} livres.
+      </div>
+      <div v-else class="text-yellow-100">
+        Vous ne pouvez pas supprimer cet auteur, car vous n'êtes pas Admin.
       </div>
     </div>
 
@@ -77,7 +80,7 @@ export default {
           "last_name": this.author.last_name,
           "birth_date": this.author.birth_date,
           "death_date": this.author.death_date,
-        }, {headers: this.$store.state.headers})
+        }, {headers: this.$store.getters.getHeaders})
             .then(r => {
               this.$store.commit({
                 type: 'setAlert',
@@ -93,9 +96,9 @@ export default {
       }
     },
     /** Supprime l'auteur et redirect */
-    delete() {
+    destroy() {
       if (confirm("Vous êtes sûr ?")) {
-        axios.delete(`http://127.0.0.1:8000/api/authors/${this.$route.params.id}`, {headers: this.$store.state.headers})
+        axios.delete(`http://127.0.0.1:8000/api/authors/${this.$route.params.id}`, {headers: this.$store.getters.getHeaders})
             .then(r => {
               this.$store.state.authors = this.$store.state.books = null;
 
@@ -103,7 +106,7 @@ export default {
                 type: 'setAlert',
                 alert: {
                   type: 'deleted',
-                  message: "L'auteur a bien été suprimer",
+                  message: "L'auteur a bien été supprimer",
                 }
               });
               this.$router.push({name: 'books'})
@@ -115,7 +118,10 @@ export default {
   computed: {
     author() {
       return this.$store.getters.getCurrentAuthor
-    }
+    },
+    isAdmin() {
+      return this.$store.getters.isAdmin
+    },
   }
 }
 </script>

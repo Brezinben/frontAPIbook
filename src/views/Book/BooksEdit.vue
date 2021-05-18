@@ -3,15 +3,18 @@
   <div v-if="book" class=" container mx-auto text-gray-100">
     <form-book :book="book"/>
 
-    <div class="flex">
+    <div class="flex items-center">
       <button @click="update"
               class="mt-5 mr-5 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
               type="submit">Modifier
       </button>
-      <button @click="delete"
+      <button v-if="isAdmin" type="submit"
               class="mt-5 text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded text-lg"
-              type="submit">Suprimer
+              @click="destroy">Supprimer
       </button>
+      <div v-else class="text-yellow-100">
+        Vous ne pouvez pas supprimer cet auteur, car vous n'êtes pas Admin.
+      </div>
     </div>
   </div>
 
@@ -73,7 +76,7 @@ export default {
           "status": this.book.status,
           'category_id': this.book.category.id,
           'author_id': this.book.author.id,
-        }, {headers: this.$store.state.headers})
+        }, {headers: this.$store.getters.getHeaders})
             .then(r => {
               this.$store.state.authors = this.$store.state.categories = this.$store.state.books = null;
               this.$store.commit({
@@ -90,9 +93,9 @@ export default {
       }
     },
     /** Supprime un livre.*/
-    delete() {
+    destroy() {
       if (confirm("Vous êtes sûr ?")) {
-        axios.delete(`http://127.0.0.1:8000/api/books/${this.$route.params.id}`, {headers: this.$store.state.headers})
+        axios.delete(`http://127.0.0.1:8000/api/books/${this.$route.params.id}`, {headers: this.$store.getters.getHeaders})
             .then(r => {
               this.$store.state.authors = this.$store.state.categories = this.$store.state.books = null;
               this.$store.commit({
@@ -111,6 +114,9 @@ export default {
   computed: {
     book() {
       return this.$store.getters.getCurrentBook
+    },
+    isAdmin() {
+      return this.$store.getters.isAdmin
     },
   }
 }

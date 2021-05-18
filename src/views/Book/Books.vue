@@ -59,8 +59,6 @@
         </button>
       </div>
     </div>
-
-    <check-token></check-token>
   </div>
 
   <div v-if="filteredBook"
@@ -75,7 +73,7 @@
   <div v-else-if="status||author?.first_name||category?.title"
        class="flex flex-col items-center justify-center mt-10 text-2xl text-gray-100 space-y-4">
     <div class="text-5xl">Pas de Livre Trouvé 🥴</div>
-    <div>Les critères de recheche :</div>
+    <div>Les critères de recherche :</div>
     <div v-if="status">{{ status }}</div>
     <div v-if="author.first_name" class="flex space-x-4">
       <div>L'auteur - {{ author.first_name }} {{ author.last_name }}</div>
@@ -117,13 +115,11 @@
 
 <script>
 import CardBook from "../../components/CardBook.vue";
-import CheckToken from "../../components/checkToken.vue";
 
 export default {
   name: "Books",
   components: {
     CardBook,
-    CheckToken,
   },
   data: () => {
     return {

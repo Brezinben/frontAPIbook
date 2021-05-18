@@ -75,7 +75,7 @@ const router = createRouter({
 //
 router.beforeEach((to, from, next) => {
     if (to.meta.requiresAuth) {
-        if (store.state.editor) next()
+        if (store.state.role.editor) next()
         else {
             store.commit({
                 type: 'setAlert',

@@ -66,7 +66,7 @@ export default {
           "status": this.book.status,
           'category': this.book.category.id,
           'author': this.book.author.id,
-        }, {headers: this.$store.state.headers})
+        }, {headers: this.$store.getters.getHeaders})
             .then(() => {
               //Reset les attributs
               Object.getOwnPropertyNames(this.book).forEach(p => this.book[p] = null);

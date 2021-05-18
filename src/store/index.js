@@ -12,7 +12,10 @@ export default createStore({
         currentCategory: null,
         currentAuthor: null,
 
-        editor: false,
+        role: {
+            editor: false,
+            admin: false,
+        },
         editing: false,
         token: null,
 
@@ -22,23 +25,17 @@ export default createStore({
             message: null,
             header: null,
         },
-
         errorsForm: [],
-
-        //Header des requêtes axios
-        headers: {
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${this?.token}`,
-        }
     },
     mutations: {
         isEditor: (state, payload) => {
-            if (payload.token) {
-                state.token = payload.token;
-                state.editor = true;
+            const {token, admin} = payload;
+            if (token) {
+                state.token = token;
+                state.role = {editor: true, admin: admin,};
             } else {
                 state.token = null;
-                state.editor = false;
+                state.role = {editor: false, admin: false,};
             }
             state.editing = false
         },
@@ -60,17 +57,18 @@ export default createStore({
         setCurrentAuthor: (state, author) => state.currentAuthors = state.authors.find(a => a.id === author.id),
 
         setAlert: (state, payload) => {
+            const {type, message, header} = payload.alert;
             state.alert = {
                 show: true,
-                type: payload.alert.type,
-                message: payload.alert.message,
-                header: payload.alert.header,
+                type: type,
+                message: message,
+                header: header,
             }
         },
 
         setErrorFrom: (state, error) => {
             //Viens mettre en place les elements pour la comprehension du user
-            let data = error.response.data;
+            const data = error.response.data;
             state.errorsForm = data.errors;
             state.alert = {
                 show: true,
@@ -91,8 +89,16 @@ export default createStore({
         getCurrentCategory: (state) => state.currentCategories,
         getCurrentAuthor: (state) => state.currentAuthors,
 
-        isEditor: (state) => state.editor,
+        isEditor: (state) => state.role.editor,
+        isAdmin: (state) => state.role.admin,
         isEditing: (state) => state.editing,
+
         getToken: (state) => state.token,
+        getHeaders: (state) => {
+            return {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${state.token}`,
+            }
+        }
     }
 })

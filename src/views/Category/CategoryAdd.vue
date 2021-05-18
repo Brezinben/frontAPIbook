@@ -58,7 +58,7 @@ export default {
       if (this.checkForm(event)) {
         axios.post("http://127.0.0.1:8000/api/categories/", {
           "title": this.category.title,
-        }, {headers: this.$store.state.headers})
+        }, {headers: this.$store.getters.getHeaders})
             .then(() => {
               //Reset les attributs
               Object.getOwnPropertyNames(this.category).forEach(p => this.category[p] = null);

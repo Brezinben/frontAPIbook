@@ -64,7 +64,7 @@ export default {
           "last_name": this.author.last_name,
           "birth_date": this.author.birth_date,
           "death_date": this.author.death_date,
-        }, {headers: this.$store.state.headers})
+        }, {headers: this.$store.getters.getHeaders})
             .then(r => {
               //Reset les attributs
               Object.getOwnPropertyNames(this.author).forEach(p => this.author[p] = null);
