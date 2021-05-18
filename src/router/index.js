@@ -76,7 +76,18 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     if (to.meta.requiresAuth) {
         if (store.state.editor) next()
-        else next({name: 'books'})
+        else {
+            store.commit({
+                type: 'setAlert',
+                alert: {
+                    type: 'warning',
+                    message: "👹 Vous n'êtes pas Authentifier 👹",
+                    header: "Attention!!",
+                }
+            });
+            console.group()
+            next({name: 'books'});
+        }
     } else next()
 })
 
