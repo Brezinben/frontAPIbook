@@ -9,37 +9,20 @@
     </div>
 
     <div v-if="isValid" class="flex flex-col">
-
-      <transition name="fader">
-        <!-- Partie checker-->
-        <label v-if="$store.state.editing" class="inline-flex items-center cursor-pointer" for="checked">
+      <label class="inline-flex items-center cursor-pointer">
     <span class="relative">
       <span class="block w-10 h-6 bg-gray-200 rounded-full shadow-inner"></span>
       <span
-          class="absolute block w-4 h-4 mt-1 ml-1 rounded-full shadow inset-y-0 left-0 focus-within:shadow-outline transition-transform duration-300 ease-in-out bg-gradient-to-r from-yellow-400  to-yellow-600 transform translate-x-full">
-        <input id="checked" class="absolute opacity-0 w-0 h-0" type="checkbox"
-               @click="$store.state.editing =! $store.state.editing"/>
-      </span>
-    </span>
-          <span class="ml-3 text-sm mr-2 whitespace-nowrap">Edition 🔥</span>
-        </label>
-
-        <!-- Partie Non Check -->
-        <label v-else class="inline-flex items-center cursor-pointer">
-    <span class="relative">
-      <span class="block w-10 h-6 bg-gray-200 rounded-full shadow-inner"></span>
-      <span
-          class="absolute block w-4 h-4 mt-1 ml-1 bg-gradient-to-r from-blue-400  to-blue-600 rounded-full shadow inset-y-0 left-0 focus-within:shadow-outline transition-transform duration-300 ease-in-out">
-        <input id="unchecked" class="absolute opacity-0 w-0 h-0" type="checkbox"
+          :class="toggler"
+          class="absolute block w-4 h-4  rounded-full shadow inset-y-0  focus-within:shadow-outline">
+        <input id="unchecked2" class="absolute opacity-0 w-0 h-0" type="checkbox"
                @click="$store.state.editing =!$store.state.editing"/>
       </span>
     </span>
-          <span class="ml-3 text-sm mr-2 whitespace-nowrap">Edition ❄</span>
-        </label>
-      </transition>
-
+        <span v-if="$store.state.editing" class="ml-3 text-sm mr-2 whitespace-nowrap">Edition 🔥</span>
+        <span v-else class="ml-3 text-sm mr-2 whitespace-nowrap">Edition ❄</span>
+      </label>
     </div>
-
   </div>
 
 </template>
@@ -52,6 +35,7 @@ export default {
       isValid: false,
       role: null,
       tempToken: null,
+
     }
   },
   mounted() {
@@ -94,7 +78,13 @@ export default {
   computed: {
     token() {
       return this.$store.getters.getToken
-    }
+    },
+    toggler() {
+      return {
+        'bg-gradient-to-r from-yellow-400  to-yellow-600 right-0 mt-1 mr-1': this.$store.state.editing,
+        'bg-gradient-to-r from-blue-400  to-blue-600 left-0 mt-1 ml-1': !this.$store.state.editing,
+      }
+    },
   }
 }
 </script>
@@ -111,12 +101,16 @@ export default {
 
 .fader-enter,
 .fader-enter-active,
-.fader-enter-to,
+.fader-enter-to {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
 .fader-leave,
 .fader-leave-active,
 .fader-leave-to {
   opacity: 0;
-  transform: translateY(100%);
+  transform: translateY(-100%);
 }
 
 </style>
