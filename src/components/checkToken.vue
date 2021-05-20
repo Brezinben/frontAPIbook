@@ -14,7 +14,7 @@
       <span class="block w-10 h-6 bg-gray-200 rounded-full shadow-inner"></span>
       <span
           :class="toggler"
-          class="absolute block w-4 h-4  rounded-full shadow inset-y-0  focus-within:shadow-outline">
+          class="absolute block w-4 h-4  rounded-full shadow inset-y-0 transform  ml-1 mt-1 duration-500 focus-within:shadow-outline">
         <input id="unchecked2" class="absolute opacity-0 w-0 h-0" type="checkbox"
                @click="$store.state.editing =!$store.state.editing"/>
       </span>
@@ -81,8 +81,8 @@ export default {
     },
     toggler() {
       return {
-        'bg-gradient-to-r from-yellow-400  to-yellow-600 right-0 mt-1 mr-1': this.$store.state.editing,
-        'bg-gradient-to-r from-blue-400  to-blue-600 left-0 mt-1 ml-1': !this.$store.state.editing,
+        'bg-gradient-to-r from-yellow-400  to-yellow-600   translate-x-full': this.$store.state.editing,
+        'bg-gradient-to-r from-blue-400  to-blue-600  translate-x-0': !this.$store.state.editing,
       }
     },
   }

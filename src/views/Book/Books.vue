@@ -59,6 +59,24 @@
         </button>
       </div>
     </div>
+
+
+    <div class="flex">
+      <button v-if="filteredBook" class="btn mr-6" @click="reverseBooks">
+        <svg :class="sorter" class="w-6 h-6 duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+             xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2"></path>
+        </svg>
+      </button>
+      <div class="flex items-center space-x-3">
+        <input id="d" v-model="dateWanted" class="form__input" pattern="\d{4}-\d{2}-\d{2}" style="max-width: 10em"
+               type="date">
+        <label class="whitespace-nowrap" for="d">Filtrer sur une date</label>
+      </div>
+    </div>
+
+
   </div>
 
   <div v-if="filteredBook"
@@ -70,11 +88,12 @@
         @change-filter-category="filterCat" @change-filter-author="filterAut"/>
   </div>
 
-  <div v-else-if="status||author?.first_name||category?.title"
+  <div v-else-if="status||author?.first_name||category?.title||dateWanted"
        class="flex flex-col items-center justify-center mt-10 text-2xl text-gray-100 space-y-4">
     <div class="text-5xl">Pas de Livre Trouvé 🥴</div>
     <div>Les critères de recherche :</div>
     <div v-if="status">{{ status }}</div>
+    <div v-if="dateWanted">Date de recherche - {{ dateWanted }}</div>
     <div v-if="author.first_name" class="flex space-x-4">
       <div>L'auteur - {{ author.first_name }} {{ author.last_name }}</div>
       <router-link
@@ -126,6 +145,8 @@ export default {
       author: null,
       category: null,
       status: null,
+      asc: true,
+      dateWanted: null,
     }
   },
   mounted() {
@@ -148,7 +169,12 @@ export default {
     filterAut(payload) {
       this.author = payload.author;
     },
-  }, computed: {
+    reverseBooks() {
+      this.books = this.books.reverse();
+      this.asc = !this.asc;
+    },
+  },
+  computed: {
     filteredBook() {
       if (this.books) {
         let toFilter = this.books;
@@ -161,7 +187,16 @@ export default {
         if (this.status) {
           toFilter = toFilter.filter(b => b.status === this.status)
         }
+        if (this.dateWanted) {
+          toFilter = toFilter.filter(b => b.publish_date === this.dateWanted)
+        }
         return toFilter.length ? toFilter : null;
+      }
+    },
+    sorter() {
+      return {
+        'transform rotate-0': this.asc,
+        'transform rotate-180': !this.asc,
       }
     },
     books() {
@@ -176,6 +211,9 @@ export default {
     edition() {
       return this.$store.getters.isEditing
     }
+  },
+  watch: {
+    filteredBook: window.onscroll,
   }
 }
 
@@ -188,5 +226,13 @@ export default {
 .reset-field-filter:hover svg {
   transform: rotateZ(180deg) scale(1.1);
   transition-duration: 900ms;
+}
+
+.btn {
+  @apply bg-gray-800  rounded-sm cursor-pointer items-center justify-center text-center flex-shrink-0  inline-flex  hover:bg-gray-700 duration-200;
+  outline: none;
+  height: 3rem;
+  padding: 0 1rem;
+  min-height: 3rem;
 }
 </style>

@@ -4,8 +4,14 @@
     <meta charset="UTF-8"/>
     <link href="/favicon.ico" rel="icon"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>---</title>
+    <title>LES LIVRES DE FOU</title>
 </head>
+
+<style>
+    ::-webkit-scrollbar {
+        display: none;
+    }
+</style>
 <body class="bg-gray-900">
 
 <div class="scrollbar__indication">
@@ -20,12 +26,17 @@
 </body>
 <script>
     window.onscroll = () => {
-        //Calcule le % de page parcouru
-        let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-        let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        let scrolled = (winScroll / height) * 100;
-        document.getElementById("sc").style.width = scrolled + "%";
-    };
+        let pourcentage;
+        if (document.documentElement.scrollHeight > document.documentElement.clientHeight) {
+            //Calcule le % de page parcouru
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            pourcentage = (winScroll / height) * 100;
+        } else {
+            pourcentage = 0;
+        }
+        document.getElementById("sc").style.width = pourcentage + "%";
+    }
 </script>
 </html>
 
